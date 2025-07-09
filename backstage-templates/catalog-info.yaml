@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: backstage-templates
+  description: Plantillas personalizadas de Backstage
+spec:
+  targets:
+    - ./crear-namespace/template.yaml
