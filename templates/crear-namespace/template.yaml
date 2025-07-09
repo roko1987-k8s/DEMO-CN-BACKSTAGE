@@ -1,0 +1,43 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: crear-namespace
+  title: Crear Namespace
+  description: Crea un manifiesto de Kubernetes Namespace a partir de un nombre
+spec:
+  owner: user:josua
+  type: service
+
+  parameters:
+    - title: Parámetros
+      required:
+        - namespace
+      properties:
+        namespace:
+          type: string
+          title: Nombre del Namespace
+
+  steps:
+    - id: fetch
+      name: Cargar plantilla
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          namespace: ${{ parameters.namespace }}
+
+    - id: publish
+      name: Subir a GitHub
+      action: publish:github
+      input:
+        repoUrl: github.com/tu-org/namespaces
+        repoVisibility: public
+        defaultBranch: main
+        commitMessage: Crear namespace ${{ parameters.namespace }}
+
+    - id: register
+      name: Registrar en catálogo
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
