@@ -30,6 +30,8 @@ spec:
       name: Subir a GitHub
       action: publish:github
       input:
+        allowedHosts:
+          - github.com
         repoUrl: github.com/tu-org/namespaces
         repoVisibility: public
         defaultBranch: main
