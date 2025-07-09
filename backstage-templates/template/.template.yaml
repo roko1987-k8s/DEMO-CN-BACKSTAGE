@@ -1,0 +1,44 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: create-aks-namespace
+  title: Crear un Namespace en AKS
+  description: Esta plantilla crea un Namespace en un clúster AKS.
+  tags:
+    - aks
+    - kubernetes
+    - namespace
+spec:
+  owner: user:default/guest
+  type: service
+
+  parameters:
+    - title: Parámetros del Namespace
+      required:
+        - namespace
+      properties:
+        namespace:
+          type: string
+          title: Nombre del Namespace
+
+  steps:
+    - id: fetch
+      name: Copiar plantilla
+      action: fetch:template
+      input:
+        url: ./template
+        values:
+          namespace: ${{ parameters.namespace }}
+
+    - id: apply
+      name: Crear Namespace en AKS
+      action: kubernetes:apply
+      input:
+        manifests:
+          - ./namespace.yaml
+
+  output:
+    text:
+      - title: Namespace creado
+        content: |
+          El Namespace `${{ parameters.namespace }}` fue creado en tu clúster AKS.
